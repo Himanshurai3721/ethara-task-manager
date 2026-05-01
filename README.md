@@ -1,169 +1,88 @@
 # Team Task Manager
 
-A production-ready full-stack task management application with role-based access control.
+🔗 **Live Demo:** https://ethara-task-manager-production-1bfc.up.railway.app/
+
+A full-stack task management system built with Flask REST APIs, featuring role-based access control, project collaboration, and real-time task tracking. Deployed on Railway.
+
+---
 
 ## Features
 
-- **Authentication System**: JWT-based auth with bcrypt password hashing
-- **Role-Based Access Control**: Admin and Member roles
-- **Project Management**: Create projects, add/remove members
-- **Task Management**: Create, assign, and track tasks with status filtering
-- **Dashboard**: Overview with task statistics and overdue alerts
+* User Authentication (JWT-based login/signup)
+* Role-Based Access (Admin / Member)
+* Project creation & team management
+* Task assignment & status tracking
+* Dashboard with task overview & overdue alerts
+
+---
 
 ## Tech Stack
 
-- **Backend**: Python Flask (REST API)
-- **Frontend**: HTML, CSS, Vanilla JavaScript
-- **Database**: PostgreSQL (SQLite for local dev)
-- **Authentication**: JWT tokens
+* **Backend:** Flask (REST API)
+* **Frontend:** HTML, CSS, JavaScript
+* **Database:** PostgreSQL (Production), SQLite (Local)
+* **Auth:** JWT
+
+---
 
 ## Project Structure
 
 ```
-team-task-manager/
-├── backend/
-│   ├── app/
-│   │   ├── models/       # Database models
-│   │   ├── routes/       # API endpoints
-│   │   └── utils/        # Helper functions
-│   ├── config.py         # Configuration
-│   ├── run.py            # Application entry point
-│   └── requirements.txt  # Python dependencies
-├── frontend/
-│   ├── index.html        # Login/Signup
-│   ├── dashboard.html   # Main dashboard
-│   ├── projects.html     # Projects page
-│   ├── tasks.html        # Tasks page
+ETHARA/
+├── backend/              # Flask API
+│   ├── app/              # Models, routes, utils
+│   ├── instance/         # Local DB
+│   ├── config.py
+│   └── run.py
+├── frontend/             # UI
+│   ├── index.html
+│   ├── dashboard.html
 │   ├── css/
-│   │   └── style.css     # Styles
 │   └── js/
-│       ├── auth.js       # Auth handling
-│       ├── api.js        # API calls
-│       └── app.js        # Main app logic
-├── Procfile              # Railway deployment
-├── runtime.txt           # Python version
-└── README.md
+├── wsgi.py               # Production entry point
+├── Procfile              # Railway config
+├── runtime.txt
+└── requirements.txt
 ```
 
-## Setup Instructions
+---
 
-### Prerequisites
+## Why this project?
 
-- Python 3.10+
-- PostgreSQL (optional for local dev)
+This project demonstrates backend API design, authentication, database integration, and deployment skills required for real-world applications.
 
-### Local Development
+---
 
-1. **Create virtual environment**:
-```bash
+## Run Locally
+
+```
 cd backend
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
-
-2. **Install dependencies**:
-```bash
 pip install -r requirements.txt
-```
-
-3. **Set environment variables**:
-```bash
-# On Windows (CMD)
-set FLASK_APP=run.py
-set FLASK_ENV=development
-set SECRET_KEY=your-secret-key
-set DATABASE_URL=sqlite:///teamtask.db
-
-# On Windows (PowerShell)
-$env:FLASK_APP="run.py"
-$env:FLASK_ENV="development"
-$env:SECRET_KEY="your-secret-key"
-$env:DATABASE_URL="sqlite:///teamtask.db"
-```
-
-4. **Run the application**:
-```bash
-cd backend
 python run.py
 ```
 
-5. **Access the app**:
-- Frontend: http://localhost:5000
-- API: http://localhost:5000/api
+---
 
-### Railway Deployment
+## Deployment
 
-1. **Push to GitHub**
+Deployed on Railway using Gunicorn and PostgreSQL.
 
-2. **Create Railway project**:
-   - Go to railway.app
-   - Create new project from GitHub repo
+---
 
-3. **Add environment variables**:
-   ```
-   SECRET_KEY=<generate-random-key>
-   DATABASE_URL=<postgresql-connection-string>
-   FLASK_ENV=production
-   ```
+## Demo Usage
 
-4. **Deploy**: Railway will automatically detect Python and deploy
-
-## API Endpoints
-
-### Authentication
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | /api/auth/register | Register new user |
-| POST | /api/auth/login | Login user |
-| GET | /api/auth/me | Get current user |
-
-### Projects
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | /api/projects | List all projects |
-| POST | /api/projects | Create project (Admin) |
-| GET | /api/projects/:id | Get project details |
-| PUT | /api/projects/:id | Update project |
-| DELETE | /api/projects/:id | Delete project |
-| POST | /api/projects/:id/members | Add member to project |
-| DELETE | /api/projects/:id/members/:userId | Remove member |
-
-### Tasks
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | /api/projects/:projectId/tasks | List tasks |
-| POST | /api/projects/:projectId/tasks | Create task |
-| PUT | /api/tasks/:id | Update task |
-| DELETE | /api/tasks/:id | Delete task |
-
-### Dashboard
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | /api/dashboard/stats | Get dashboard statistics |
-
-## Demo Credentials
-
-After registration, users are assigned "Member" role by default. To get admin access:
-
-1. Register a new account
-2. Manually update the role in database to "admin"
-
-Or use the first registered user as admin.
-
-## Environment Variables
-
-| Variable | Description | Default |
-|----------|-------------|---------|
-| SECRET_KEY | JWT secret key | random-string |
-| DATABASE_URL | Database connection | sqlite:///teamtask.db |
-| FLASK_ENV | Environment | development |
-| FLASK_APP | Application module | run.py |
+* Register a new account
+* Create a project
+* Add and assign tasks
+* Track progress via dashboard
 
 ## Screenshots
 
-The application includes:
-- Clean login/signup pages
-- Dashboard with task statistics
-- Project management interface
-- Task creation and tracking
-- Overdue task highlighting
+### Login Page
+![Login](./screenshots/login.png)
+
+### Dashboard
+![Dashboard](./screenshots/dashboard.png)
+
+### Task Management
+![Tasks](./screenshots/tasks.png)
