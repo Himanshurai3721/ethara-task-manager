@@ -8,38 +8,31 @@ from flask_cors import CORS
 
 from app.models.models import db
 
+# Resolve frontend folder relative to this file:
+# backend/app/__init__.py  →  ../../frontend
+_FRONTEND = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "..", "..", "frontend")
+)
+
 
 def create_app(config_class=None):
-    """
-    Application factory pattern.
+    app = Flask(__name__, static_folder=_FRONTEND, static_url_path="")
 
-    Args:
-        config_class: Optional config class override (useful for testing).
-
-    Returns:
-        Configured Flask application instance.
-    """
-    app = Flask(__name__,
-                static_folder=os.path.join(os.path.dirname(__file__), '..', '..', 'frontend'),
-                static_url_path='')
-
-    # ------------------------------------------------------------------ config
+    # ── config ────────────────────────────────────────────────────────────────
     if config_class:
         app.config.from_object(config_class)
     else:
         from config import get_config
         app.config.from_object(get_config())
 
-    # ------------------------------------------------------------------- CORS
+    # ── extensions ────────────────────────────────────────────────────────────
     CORS(app, resources={r"/api/*": {"origins": "*"}})
-
-    # --------------------------------------------------------------- database
     db.init_app(app)
 
-    # --------------------------------------------------------------- blueprints
-    from app.routes.auth import auth_bp
-    from app.routes.projects import projects_bp
-    from app.routes.tasks import tasks_bp
+    # ── blueprints ────────────────────────────────────────────────────────────
+    from app.routes.auth      import auth_bp
+    from app.routes.projects  import projects_bp
+    from app.routes.tasks     import tasks_bp
     from app.routes.dashboard import dashboard_bp
 
     app.register_blueprint(auth_bp)
@@ -47,7 +40,7 @@ def create_app(config_class=None):
     app.register_blueprint(tasks_bp)
     app.register_blueprint(dashboard_bp)
 
-    # ---------------------------------------------------------- static pages
+    # ── static pages ──────────────────────────────────────────────────────────
     @app.route("/")
     def serve_index():
         return app.send_static_file("index.html")
@@ -56,12 +49,12 @@ def create_app(config_class=None):
     def serve_dashboard():
         return app.send_static_file("dashboard.html")
 
-    # ---------------------------------------------------------- health check
+    # ── health check ──────────────────────────────────────────────────────────
     @app.route("/api/health")
     def health_check():
-        return jsonify({"status": "healthy", "message": "Team Task Manager API is running"}), 200
+        return jsonify({"status": "healthy"}), 200
 
-    # --------------------------------------------------------- error handlers
+    # ── error handlers ────────────────────────────────────────────────────────
     @app.errorhandler(400)
     def bad_request(e):
         return jsonify({"error": "Bad request", "message": str(e)}), 400
@@ -78,7 +71,7 @@ def create_app(config_class=None):
     def server_error(e):
         return jsonify({"error": "Internal server error"}), 500
 
-    # --------------------------------------------------- create DB tables
+    # ── create tables ─────────────────────────────────────────────────────────
     with app.app_context():
         db.create_all()
 
